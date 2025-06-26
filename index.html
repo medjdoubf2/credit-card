@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de Tarjetas de Crédito</title>
+    <style>
+        body {
+            font-family:'Times New Roman', Times, serif;
+            background-image:url(fondo.png);
+            padding: 20px;
+        }
+        h1 {
+            color:gray;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #1ae1ef;
+            color: rgb(198, 153, 153);
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #dde76d;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Validador de Tarjetas de Crédito</h1>
+    <input type="text" id="cardNumber" placeholder="Ingresa el número de la tarjeta" />
+    <button onclick="validateCard()"><b>Validar</b></button>
+    <div class="result" id="result"></div>
+
+    <script>
+        function validateCard() {
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const isValid = luhnCheck(cardNumber);
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = isValid ? "La tarjeta es válida." : "La tarjeta es inválida.";
+            resultDiv.style.color = isValid ? "green" : "blue"; // Cambiado a azul
+        }
+
+        function luhnCheck(cardNumber) {
+            let sum = 0;
+            const nDigits = cardNumber.length;
+            const parity = nDigits % 2;
+
+            for (let i = 0; i < nDigits; i++) {
+                let digit = parseInt(cardNumber.charAt(i), 10);
+
+                // Duplicar los dígitos en posiciones alternas
+                if (i % 2 === parity) {
+                    digit *= 2;
+                    // Si el resultado es mayor a 9, restar 9
+                    if (digit > 9) {
+                        digit -= 9;
+                    }
+                }
+                sum += digit;
+            }
+
+            // La tarjeta es válida si la suma es múltiplo de 10
+            return sum % 10 === 0;
+        }
+    </script>
+
+</body>
+</html>
